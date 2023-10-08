@@ -3,28 +3,28 @@ package com.mobdeve.see.fitnessapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import com.mobdeve.see.fitnessapp.databinding.*
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var loginButton: Button
+    private lateinit var registerButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        val viewBinding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
 
-        // Set click listeners for login and register buttons
-        val loginButton = findViewById<Button>(R.id.mainLoginButton)
-        val registerButton = findViewById<Button>(R.id.mainRegisterButton)
+        viewBinding.btnLogin.setOnClickListener (View.OnClickListener {
+            val intent = Intent(applicationContext, Login::class.java)
+            this.startActivity(intent)
+        })
 
-        loginButton.setOnClickListener {
-            // Navigate to the Login Activity
-            val intent = Intent(this, Login::class.java)
-            startActivity(intent)
-        }
-
-        registerButton.setOnClickListener {
-            // Navigate to the Register Activity
-            val intent = Intent(this, Register::class.java)
-            startActivity(intent)
-        }
+        viewBinding.btnRegister.setOnClickListener (View.OnClickListener {
+            val intent = Intent(applicationContext, Register::class.java)
+            this.startActivity(intent)
+        })
     }
+
 }

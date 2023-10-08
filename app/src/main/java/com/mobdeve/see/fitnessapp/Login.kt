@@ -4,18 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.mobdeve.see.fitnessapp.databinding.ActivityLoginBinding
 
 class Login : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        val viewBinding: ActivityLoginBinding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
 
-        val loginButton = findViewById<Button>(R.id.loginButton)
-        loginButton.setOnClickListener {
-            // Implement login logic here
-            // After successful login, navigate to the User Profile page
-            startActivity(Intent(this, UserProfile::class.java))
+        viewBinding.loginButton.setOnClickListener {
+            val intent = Intent(applicationContext, UserProfile::class.java)
+            this.startActivity(intent)
         }
     }
 }

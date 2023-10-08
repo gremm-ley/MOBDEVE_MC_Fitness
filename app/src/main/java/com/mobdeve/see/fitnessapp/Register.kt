@@ -5,17 +5,18 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
+import com.mobdeve.see.fitnessapp.databinding.ActivityLoginBinding
+import com.mobdeve.see.fitnessapp.databinding.ActivityRegisterBinding
 
 class Register : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+        val viewBinding: ActivityRegisterBinding = ActivityRegisterBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
 
-        val registerButton = findViewById<Button>(R.id.registerButton)
-        registerButton.setOnClickListener {
-            // Implement registration logic here
-            // After successful registration, navigate to the User Profile page
-            startActivity(Intent(this, UserProfile::class.java))
+        viewBinding.registerButton.setOnClickListener {
+            val intent = Intent(applicationContext, UserProfile::class.java)
+            this.startActivity(intent)
         }
     }
 }

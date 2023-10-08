@@ -2,12 +2,14 @@ package com.mobdeve.see.fitnessapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.mobdeve.see.fitnessapp.databinding.ActivityUserProfileBinding
 
 class UserProfile : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_profile)
+        val viewBinding : ActivityUserProfileBinding = ActivityUserProfileBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
 
         // Implement user profile functionality here
     }
