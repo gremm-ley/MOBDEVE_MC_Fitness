@@ -14,6 +14,7 @@ class RegisterActivity : AppCompatActivity() {
         viewBinding.registerButton.setOnClickListener {
             val intent = Intent(applicationContext, UserProfileActivity::class.java)
             this.startActivity(intent)
+            finish()
         }
     }
 }

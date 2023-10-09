@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="200dp"
+        android:background="@drawable/circle_shape"
         android:gravity="center"
         android:padding="10dp"
         android:text="123"
