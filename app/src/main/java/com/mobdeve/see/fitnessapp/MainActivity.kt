@@ -17,12 +17,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
 
         viewBinding.btnLogin.setOnClickListener (View.OnClickListener {
-            val intent = Intent(applicationContext, Login::class.java)
+            val intent = Intent(applicationContext, LoginActivity::class.java)
             this.startActivity(intent)
         })
 
         viewBinding.btnRegister.setOnClickListener (View.OnClickListener {
-            val intent = Intent(applicationContext, Register::class.java)
+            val intent = Intent(applicationContext, RegisterActivity::class.java)
             this.startActivity(intent)
         })
     }

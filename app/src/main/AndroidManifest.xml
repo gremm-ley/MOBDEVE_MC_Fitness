@@ -13,13 +13,13 @@
         android:theme="@style/Theme.Mobdeve_MCO_Fitness"
         tools:targetApi="31">
         <activity
-            android:name=".Login"
+            android:name=".LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".Register"
+            android:name=".RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".UserProfile"
+            android:name=".UserProfileActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
