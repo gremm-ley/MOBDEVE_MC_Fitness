@@ -9,10 +9,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp"
-        tools:context=".AccelerometerSetupActivity">
+        tools:context=".SetGoalActivity">
 
         <TextView
-            android:id="@+id/textViewTitle"
+            android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Set Goal"
@@ -20,7 +20,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textViewStepGoal"
+            android:id="@+id/tvStepGoal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Set your daily step goal:"
@@ -37,7 +37,7 @@
             android:progressDrawable="@drawable/custom_progress"/>
 
         <TextView
-            android:id="@+id/textViewStepGoalValue"
+            android:id="@+id/tvStepGoalValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5000 steps"
@@ -45,7 +45,7 @@
             android:layout_marginTop="8dp" />
 
         <Button
-            android:id="@+id/saveButton"
+            android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save"

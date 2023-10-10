@@ -17,7 +17,7 @@ class SetGoalActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
 
         stepGoalSeekBar = findViewById(R.id.stepGoalSeekBar)
-        stepGoalValueTextView = findViewById(R.id.textViewStepGoalValue)
+        stepGoalValueTextView = findViewById(R.id.tvStepGoalValue)
 
         // Set an initial value for the step goal text view
         stepGoalValueTextView.text = "${stepGoalSeekBar.progress} steps"
@@ -38,7 +38,7 @@ class SetGoalActivity : AppCompatActivity() {
         })
 
         // Implement functionality to save the step goal when the "Save" button is clicked
-        val saveButton = findViewById<Button>(R.id.saveButton)
+        val saveButton = findViewById<Button>(R.id.btnSave)
         saveButton.setOnClickListener {
             val stepGoal = stepGoalSeekBar.progress
             // Save the step goal to the database or preferences
