@@ -25,5 +25,10 @@ class UserProfileActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, MapActivity::class.java)
             this.startActivity(intent)
         }
+        viewBinding.btnStats.setOnClickListener{
+            val intent = Intent(applicationContext, StatsActivity::class.java)
+            this.startActivity(intent)
+        }
+
     }
 }
