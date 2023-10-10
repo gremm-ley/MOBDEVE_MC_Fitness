@@ -17,5 +17,9 @@ class UserProfileActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, StepsCounterActivity::class.java)
             this.startActivity(intent)
         }
+        viewBinding.btnSetGoal.setOnClickListener{
+            val intent = Intent(applicationContext, SetGoalActivity::class.java)
+            this.startActivity(intent)
+        }
     }
 }

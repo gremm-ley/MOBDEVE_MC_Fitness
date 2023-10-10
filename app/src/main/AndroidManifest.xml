@@ -25,6 +25,9 @@
             android:name=".StepsCounterActivity"
             android:exported="false" />
         <activity
+            android:name=".SetGoalActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
