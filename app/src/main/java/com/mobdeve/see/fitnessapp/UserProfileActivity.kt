@@ -36,5 +36,7 @@ class UserProfileActivity : AppCompatActivity() {
         viewBinding.btnLogout.setOnClickListener {
             finish()
         }
+
+
     }
 }

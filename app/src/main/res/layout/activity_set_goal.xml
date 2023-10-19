@@ -3,12 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/background_color"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:background="@drawable/roundlayout"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:padding="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:context=".SetGoalActivity">
 
         <TextView
@@ -23,44 +30,50 @@
             android:id="@+id/tvStepGoal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Set your daily step goal:"
-            android:textSize="18sp"
-            android:layout_marginTop="16dp" />
+            android:textSize="18sp" />
 
         <SeekBar
             android:id="@+id/stepGoalSeekBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
             android:max="10000"
+            android:paddingTop="15dp"
             android:progress="5000"
-            android:progressDrawable="@drawable/custom_progress"/>
+            android:progressDrawable="@drawable/custom_progress" />
 
-        <TextView
-            android:id="@+id/tvStepGoalValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5000 steps"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etnStepValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:inputType="number"
+                android:text="5000"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvStepGoalValue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:gravity="center|left"
+                android:text=" steps"
+                android:textSize="20sp" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
             android:layout_gravity="center"
-            android:layout_marginTop="24dp" />
-
-        <EditText
-            android:id="@+id/etnStepValue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number"
-            android:text="5000"
-
-            />
+            android:layout_marginTop="24dp"
+            android:text="Save" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

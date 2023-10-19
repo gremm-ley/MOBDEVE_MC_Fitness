@@ -21,13 +21,14 @@ class SetGoalActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
 
         stepGoalSeekBar = findViewById(R.id.stepGoalSeekBar)
-        stepGoalValueTextView = findViewById(R.id.tvStepGoalValue)
+        //stepGoalValueTextView = findViewById(R.id.tvStepGoalValue)
         stepSetValueEditText = findViewById(R.id.etnStepValue)
 
 
+
         // Set an initial value for the step goal text view
-        stepGoalValueTextView.text = "${stepGoalSeekBar.progress} steps"
-        stepSetValueEditText.setText("${stepGoalSeekBar.progress}");
+        //stepGoalValueTextView.text = "${stepGoalSeekBar.progress} steps"
+        stepSetValueEditText.setText("${stepGoalSeekBar.progress}")
 
         // Set a listener to update the step goal text view when the seek bar is changed
 
@@ -40,14 +41,14 @@ class SetGoalActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                stepGoalSeekBar.progress = Integer.parseInt(s.toString());
+                stepGoalSeekBar.progress = Integer.parseInt(s.toString())
             }
         })
 
         stepGoalSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                stepGoalValueTextView.text = "$progress steps"
-                stepSetValueEditText.setText("$progress");
+                //stepGoalValueTextView.text = "$progress steps"
+                stepSetValueEditText.setText("$progress")
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -66,7 +67,7 @@ class SetGoalActivity : AppCompatActivity() {
             // Save the step goal to the database or preferences
             // You can add your code here to save the user's step goal
 
-            Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show()
 
         }
     }
