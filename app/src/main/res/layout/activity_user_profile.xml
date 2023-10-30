@@ -50,15 +50,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_step_counter" />
 
-        <Button
-            android:id="@+id/btn_map"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="Map"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_set_goal"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btn_stats"
@@ -67,7 +58,7 @@
             android:text="Stats"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_map" />
+            app:layout_constraintTop_toBottomOf="@id/btn_set_goal" />
 
         <Button
             android:id="@+id/btn_travel_history"
