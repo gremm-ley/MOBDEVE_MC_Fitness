@@ -7,14 +7,15 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.mobdeve.see.fitnessapp.databinding.ActivityLoginBinding
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
 
-    // Replace with a more secure storage method for production
-    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var userDao: UserDao
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val viewBinding: ActivityLoginBinding = ActivityLoginBinding.inflate(layoutInflater)
@@ -22,6 +23,9 @@ class LoginActivity : AppCompatActivity() {
 
         emailEditText = findViewById(R.id.emailEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
+
+        val appDatabase = AppDatabase.getDatabase(this) // Get the database instance
+        userDao = appDatabase.userDao()
 
         val loginButton: Button = findViewById(R.id.loginButton)
 
@@ -32,19 +36,19 @@ class LoginActivity : AppCompatActivity() {
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             } else {
-                /*val storedEmail = sharedPreferences.getString("email", "")
-                val storedPassword = sharedPreferences.getString("password", "")
-
-                if (email == storedEmail && password == storedPassword) {
-                    // Success
-                    startActivity(Intent(this, UserProfileActivity::class.java))
-                } else {
-                    // Failure
-                    Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show()
-                }*/
-                val intent = Intent(applicationContext, UserProfileActivity::class.java)
-                this.startActivity(intent)
-                finish()
+                lifecycleScope.launch {
+                    val user = userDao.getUserByEmailAndPassword(email, password)
+                    if (user != null) {
+                        Toast.makeText(this@LoginActivity, "Login successful", Toast.LENGTH_SHORT)
+                            .show()
+                        val intent = Intent(applicationContext, UserProfileActivity::class.java)
+                        intent.putExtra("userFullName", user.name)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        Toast.makeText(this@LoginActivity, "Invalid e-mail and/or password", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }

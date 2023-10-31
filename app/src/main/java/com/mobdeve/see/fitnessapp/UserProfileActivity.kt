@@ -12,7 +12,9 @@ class UserProfileActivity : AppCompatActivity() {
         val viewBinding : ActivityUserProfileBinding = ActivityUserProfileBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
-        // Implement user profile functionality here
+        val userFullName = intent.getStringExtra("userFullName") // Get user's full name
+        viewBinding.textView.text = "Welcome, $userFullName"
+
         viewBinding.btnStepCounter.setOnClickListener {
             val intent = Intent(applicationContext, StepsCounterActivity::class.java)
             this.startActivity(intent)
@@ -36,7 +38,5 @@ class UserProfileActivity : AppCompatActivity() {
         viewBinding.btnLogout.setOnClickListener {
             finish()
         }
-
-
     }
 }

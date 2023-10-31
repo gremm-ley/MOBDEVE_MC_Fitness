@@ -7,15 +7,16 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.*
 import com.mobdeve.see.fitnessapp.databinding.ActivityRegisterBinding
+import kotlinx.coroutines.*
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var fullNameEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
 
-    // Replace with a more secure storage method for production
-    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var userDao: UserDao
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val viewBinding: ActivityRegisterBinding = ActivityRegisterBinding.inflate(layoutInflater)
@@ -24,6 +25,9 @@ class RegisterActivity : AppCompatActivity() {
         fullNameEditText = findViewById(R.id.fullNameEditText)
         emailEditText = findViewById(R.id.emailEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
+
+        val appDatabase = AppDatabase.getDatabase(this)
+        userDao = appDatabase.userDao() // Initialize UserDao
 
         val registerButton: Button = findViewById(R.id.registerButton)
 
@@ -35,15 +39,12 @@ class RegisterActivity : AppCompatActivity() {
             if (fullName.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             } else {
-                //
-                /*val editor = sharedPreferences.edit()
-                editor.putString("fullName", fullName)
-                editor.putString("email", email)
-                editor.putString("password", password)
-                editor.apply()*/
-
+                val user = User(name = fullName, email = email, password = password)
+                lifecycleScope.launch {
+                    userDao.insertUser(user)
+                }
                 Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show()
-                val intent = Intent(applicationContext, UserProfileActivity::class.java)
+                val intent = Intent(applicationContext, MainActivity::class.java)
                 this.startActivity(intent)
                 finish()
             }

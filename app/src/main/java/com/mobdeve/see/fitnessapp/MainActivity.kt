@@ -8,11 +8,11 @@ import android.widget.Button
 import com.mobdeve.see.fitnessapp.databinding.*
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var loginButton: Button
-    private lateinit var registerButton: Button
+    lateinit var database: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        database = AppDatabase.getDatabase(this)
         val viewBinding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
