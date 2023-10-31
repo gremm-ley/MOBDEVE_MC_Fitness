@@ -25,8 +25,12 @@ class UserProfileActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, StatsActivity::class.java)
             this.startActivity(intent)
         }
-        viewBinding.btnTravelHistory.setOnClickListener{
+        viewBinding.btnStepHistory.setOnClickListener{
             val intent = Intent(applicationContext, TravelHistoryActivity::class.java)
+            this.startActivity(intent)
+        }
+        viewBinding.btnDeleteProfile.setOnClickListener{
+            val intent = Intent(applicationContext, DeleteProfileActivity::class.java)
             this.startActivity(intent)
         }
         viewBinding.btnLogout.setOnClickListener {

@@ -35,6 +35,9 @@
             android:name=".TravelHistoryActivity"
             android:exported="false" />
         <activity
+            android:name=".DeleteProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
