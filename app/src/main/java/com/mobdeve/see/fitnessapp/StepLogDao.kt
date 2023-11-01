@@ -4,9 +4,12 @@ import androidx.room.*
 
 @Dao
 interface StepLogDao {
-    @Query("SELECT * FROM step_logs WHERE userId = :userId")
-    suspend fun getStepLogsForUser(userId: Int): List<StepLog>
-
+    @Query("SELECT steps, goal, date FROM step_logs WHERE userId = :userId")
+    suspend fun getStepLogsForUser(userId: Int): List<StepLogWithGoal>
+    @Query("SELECT * FROM step_logs WHERE userId = :userId AND date = :date")
+    suspend fun getStepLogForUserAndDate(userId: Int, date: String): StepLog?
+    @Query("UPDATE step_logs SET steps = :newStepCount WHERE userId = :userId AND date = :date")
+    suspend fun updateStepCountForUserAndDate(userId: Int, date: String, newStepCount: Int)
     @Insert
     suspend fun insertStepLog(stepLog: StepLog)
 

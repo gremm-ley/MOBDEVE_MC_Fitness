@@ -14,8 +14,13 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mobdeve.see.fitnessapp.databinding.*
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class StepsCounterActivity : AppCompatActivity(), SensorEventListener{
     private lateinit var sensorManager: SensorManager
@@ -23,6 +28,8 @@ class StepsCounterActivity : AppCompatActivity(), SensorEventListener{
     private lateinit var tvSteps: TextView
     private lateinit var fab: FloatingActionButton
     private var steps: Int = 0
+    private lateinit var userDao: UserDao
+    private lateinit var stepLogDao: StepLogDao
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +40,10 @@ class StepsCounterActivity : AppCompatActivity(), SensorEventListener{
         tvSteps = findViewById(R.id.tvSteps)
         fab = findViewById(R.id.btn_fab)
         tvSteps.text = steps.toString()
+
+        val appDatabase = AppDatabase.getDatabase(this)
+        userDao = appDatabase.userDao()
+        stepLogDao = appDatabase.stepLogDao()
 
         loadData()
         resetSteps()
@@ -75,7 +86,7 @@ class StepsCounterActivity : AppCompatActivity(), SensorEventListener{
         Log.d("StepsCounterActivity", "one step taken")
         if(running){
             steps++
-            tvSteps.text = steps.toString()
+            updateDatabase(steps)
         }
     }
 
@@ -107,22 +118,40 @@ class StepsCounterActivity : AppCompatActivity(), SensorEventListener{
         }
         tvSteps.setOnLongClickListener {
             steps = 0
-            tvSteps.text = steps.toString()
-            saveData()
+            updateDatabase(steps)
             true
         }
     }
 
-    private fun saveData(){
-        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putInt("stepsTaken", steps)
-        editor.apply()
+    private fun updateDatabase(steps: Int){
+        val userId = intent.getIntExtra("userId", 0)
+        val date = getTodayDate()
+        lifecycleScope.launch {
+            val stepLog = stepLogDao.getStepLogForUserAndDate(userId, date)
+            if (stepLog != null) {
+                // If a log exists for today, update the steps
+                stepLogDao.updateStepCountForUserAndDate(userId, date, steps)
+                tvSteps.text = steps.toString()
+            }
+        }
     }
     private fun loadData(){
-        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val savedSteps = sharedPreferences.getInt("stepsTaken", 0)
-        steps = savedSteps
+        val date = getTodayDate()
+        val userId = intent.getIntExtra("userId", 0)
+        lifecycleScope.launch {
+            val stepLog = stepLogDao.getStepLogForUserAndDate(userId, date)
+            if (stepLog != null) {
+                val savedSteps = stepLog.steps
+                steps = savedSteps
+                tvSteps.text = steps.toString()
+            }
+        }
+    }
+
+    private fun getTodayDate(): String {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val calendar = Calendar.getInstance()
+        return dateFormat.format(calendar.time)
     }
 }
 
