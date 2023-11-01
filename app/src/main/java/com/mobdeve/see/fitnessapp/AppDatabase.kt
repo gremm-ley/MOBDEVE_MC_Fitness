@@ -3,7 +3,7 @@ package com.mobdeve.see.fitnessapp
 import android.content.Context
 import androidx.room.*
 
-@Database(entities = [User::class, StepLog::class], version = 1)
+@Database(entities = [User::class, StepLog::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun stepLogDao(): StepLogDao
@@ -18,7 +18,7 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "app_database"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 instance
             }

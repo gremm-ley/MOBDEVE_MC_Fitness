@@ -42,6 +42,7 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this@LoginActivity, "Login successful", Toast.LENGTH_SHORT)
                             .show()
                         val intent = Intent(applicationContext, UserProfileActivity::class.java)
+                        intent.putExtra("userId", user.userId)
                         intent.putExtra("userFullName", user.name)
                         startActivity(intent)
                         finish()

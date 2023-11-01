@@ -13,6 +13,7 @@ class UserProfileActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
 
         val userFullName = intent.getStringExtra("userFullName") // Get user's full name
+        val userId = intent.getIntExtra("userId", 0)
         viewBinding.textView.text = "Welcome, $userFullName"
 
         viewBinding.btnStepCounter.setOnClickListener {
@@ -33,6 +34,7 @@ class UserProfileActivity : AppCompatActivity() {
         }
         viewBinding.btnDeleteProfile.setOnClickListener{
             val intent = Intent(applicationContext, DeleteProfileActivity::class.java)
+            intent.putExtra("userId", userId)
             this.startActivity(intent)
         }
         viewBinding.btnLogout.setOnClickListener {

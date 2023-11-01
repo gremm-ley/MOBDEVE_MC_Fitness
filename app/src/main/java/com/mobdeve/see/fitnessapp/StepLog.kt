@@ -4,7 +4,7 @@ import androidx.room.*
 
 @Entity(tableName = "step_logs")
 data class StepLog(
-    @PrimaryKey val logId: Int,
+    @PrimaryKey(autoGenerate = true) val logId: Int,
     val userId: Int,
     val steps: Int,
     val stepGoal: Int,
