@@ -5,8 +5,13 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.mobdeve.see.fitnessapp.databinding.ActivitySetGoalBinding
 import com.mobdeve.see.fitnessapp.databinding.ActivityStepCounterBinding
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import kotlin.math.roundToInt
 
 class SetGoalActivity : AppCompatActivity() {
@@ -14,7 +19,8 @@ class SetGoalActivity : AppCompatActivity() {
     private lateinit var stepGoalSeekBar: SeekBar
     private lateinit var stepGoalValueTextView: TextView
     private lateinit var stepSetValueEditText: EditText
-
+    private lateinit var userDao: UserDao
+    private lateinit var stepLogDao: StepLogDao
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val viewBinding : ActivitySetGoalBinding = ActivitySetGoalBinding.inflate(layoutInflater)
@@ -25,7 +31,9 @@ class SetGoalActivity : AppCompatActivity() {
         stepSetValueEditText = findViewById(R.id.etnStepValue)
 
 
-
+        val appDatabase = AppDatabase.getDatabase(this)
+        userDao = appDatabase.userDao()
+        stepLogDao = appDatabase.stepLogDao()
         // Set an initial value for the step goal text view
         //stepGoalValueTextView.text = "${stepGoalSeekBar.progress} steps"
         stepSetValueEditText.setText("${stepGoalSeekBar.progress}")
@@ -64,11 +72,21 @@ class SetGoalActivity : AppCompatActivity() {
         val saveButton = findViewById<Button>(R.id.btnSave)
         saveButton.setOnClickListener {
             val stepGoal = stepGoalSeekBar.progress
-            // Save the step goal to the database or preferences
-            // You can add your code here to save the user's step goal
+            val date = getTodayDate()
+            val userId = intent.getIntExtra("userId", 0)
+            lifecycleScope.launch {
+                val stepLog = stepLogDao.getStepLogForUserAndDate(userId, date)
+                if (stepLog != null) {
+                    stepLogDao.updateStepGoalForUserAndDate(userId, date, stepGoal)
+                }
+            }
 
             Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show()
-
         }
+    }
+    private fun getTodayDate(): String {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val calendar = Calendar.getInstance()
+        return dateFormat.format(calendar.time)
     }
 }

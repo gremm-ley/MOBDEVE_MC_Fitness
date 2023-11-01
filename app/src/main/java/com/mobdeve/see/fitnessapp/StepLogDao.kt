@@ -10,6 +10,8 @@ interface StepLogDao {
     suspend fun getStepLogForUserAndDate(userId: Int, date: String): StepLog?
     @Query("UPDATE step_logs SET steps = :newStepCount WHERE userId = :userId AND date = :date")
     suspend fun updateStepCountForUserAndDate(userId: Int, date: String, newStepCount: Int)
+    @Query("UPDATE step_logs SET goal = :newStepGoal WHERE userId = :userId AND date = :date")
+    suspend fun updateStepGoalForUserAndDate(userId: Int, date: String, newStepGoal: Int)
     @Insert
     suspend fun insertStepLog(stepLog: StepLog)
 

@@ -38,6 +38,7 @@ class UserProfileActivity : AppCompatActivity() {
         }
         viewBinding.btnSetGoal.setOnClickListener{
             val intent = Intent(applicationContext, SetGoalActivity::class.java)
+            intent.putExtra("userId", userId)
             this.startActivity(intent)
         }
         viewBinding.btnStats.setOnClickListener{
@@ -65,7 +66,7 @@ class UserProfileActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val stepLog = stepLogDao.getStepLogForUserAndDate(userId, date)
             if (stepLog == null) {
-                val newStepLog = StepLog(userId = userId, steps = 0, goal = 0, date = date)
+                val newStepLog = StepLog(userId = userId, steps = 0, goal = 5000, date = date)
                 Log.d("stepLogMeessage", "Made it here " + newStepLog.toString())
                 stepLogDao.insertStepLog(newStepLog)
             }
