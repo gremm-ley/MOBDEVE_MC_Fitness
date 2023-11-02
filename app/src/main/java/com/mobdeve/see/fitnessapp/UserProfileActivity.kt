@@ -43,6 +43,7 @@ class UserProfileActivity : AppCompatActivity() {
         }
         viewBinding.btnStats.setOnClickListener{
             val intent = Intent(applicationContext, StatsActivity::class.java)
+            intent.putExtra("userId", userId)
             this.startActivity(intent)
         }
         viewBinding.btnStepHistory.setOnClickListener{

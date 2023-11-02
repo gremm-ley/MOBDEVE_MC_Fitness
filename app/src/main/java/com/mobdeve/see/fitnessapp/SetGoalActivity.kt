@@ -34,11 +34,9 @@ class SetGoalActivity : AppCompatActivity() {
         val appDatabase = AppDatabase.getDatabase(this)
         userDao = appDatabase.userDao()
         stepLogDao = appDatabase.stepLogDao()
-        // Set an initial value for the step goal text view
         //stepGoalValueTextView.text = "${stepGoalSeekBar.progress} steps"
         stepSetValueEditText.setText("${stepGoalSeekBar.progress}")
 
-        // Set a listener to update the step goal text view when the seek bar is changed
 
         stepSetValueEditText.addTextChangedListener(object : TextWatcher {
 
@@ -60,11 +58,11 @@ class SetGoalActivity : AppCompatActivity() {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                // Not needed for this example
+
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                // Not needed for this example
+
             }
         })
 
