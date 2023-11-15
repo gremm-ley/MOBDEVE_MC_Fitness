@@ -26,7 +26,8 @@ class StatsActivity : AppCompatActivity(){
         lifecycleScope.launch(Dispatchers.IO) {
             val stepLogs = stepLogDao.getStepLogsForUser(userId)
 
-            val data = mutableListOf<DataEntry>()
+            val stepData = mutableListOf<DataEntry>()
+            val goalData = mutableListOf<DataEntry>()
 
             // Display the past 15 days or all available logs if less than 15
             val startIndex = maxOf(0, stepLogs.size - 15)
@@ -34,15 +35,22 @@ class StatsActivity : AppCompatActivity(){
 
             for (i in startIndex until endIndex) {
                 val stepLog = stepLogs[i]
-                val date = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(stepLog.date)
+                val date = stepLog.date
 
-                val dateStr = date?.toString() ?: "Unknown Date"
-                data.add(ValueDataEntry(dateStr, stepLog.steps))
+                stepData.add(ValueDataEntry(date, stepLog.steps))
+                goalData.add(ValueDataEntry(date, stepLog.goal))
             }
 
             withContext(Dispatchers.Main) {
                 val lineChart = AnyChart.line()
-                lineChart.data(data)
+                val stepSeries = lineChart.line(stepData)
+                val goalSeries = lineChart.line(goalData)
+
+                stepSeries.name("Steps")
+                goalSeries.name("Goal")
+
+                val yAxis = lineChart.yAxis(0)
+                yAxis.title("Steps, Goal")
 
                 val xAxis = lineChart.xAxis(0)
                 xAxis.labels().fontSize(10)
