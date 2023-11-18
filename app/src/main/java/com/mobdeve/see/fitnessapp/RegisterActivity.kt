@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.mobdeve.see.fitnessapp.databinding.ActivityRegisterBinding
 import kotlinx.coroutines.*
+import java.security.MessageDigest
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var fullNameEditText: EditText
@@ -39,7 +40,8 @@ class RegisterActivity : AppCompatActivity() {
             if (fullName.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             } else {
-                val user = User(name = fullName, email = email, password = password)
+                val encryptedPassword = encryptPassword(password)
+                val user = User(name = fullName, email = email, password = encryptedPassword)
                 lifecycleScope.launch {
                     userDao.insertUser(user)
                 }
@@ -49,5 +51,10 @@ class RegisterActivity : AppCompatActivity() {
                 finish()
             }
         }
+    }
+    private fun encryptPassword(password: String): String {
+        val digest = MessageDigest.getInstance("SHA-256")
+        val hash = digest.digest(password.toByteArray(Charsets.UTF_8))
+        return hash.joinToString("") { "%02x".format(it) }
     }
 }
