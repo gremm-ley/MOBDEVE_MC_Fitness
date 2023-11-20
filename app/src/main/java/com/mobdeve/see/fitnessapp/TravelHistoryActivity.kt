@@ -63,12 +63,9 @@ class TravelHistoryActivity : AppCompatActivity(){
     }
 
     private fun setTableRowStyle(row: TableRow) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            row.setBackgroundColor(getColor(R.color.accent_color))
-        } else {
-            row.setBackgroundColor(resources.getColor(R.color.accent_color))
-        }
-        row.setBackgroundResource(R.drawable.roundlayout)
+
+        row.setBackgroundResource(R.drawable.roundlayoutalt)
+
         row.layoutParams = TableRow.LayoutParams(
             TableRow.LayoutParams.MATCH_PARENT,
             TableRow.LayoutParams.WRAP_CONTENT
