@@ -65,7 +65,7 @@ class TravelHistoryActivity : AppCompatActivity(){
     private fun setTableRowStyle(row: TableRow) {
 
         row.setBackgroundResource(R.drawable.roundlayoutalt)
-
+        row.setPadding(0, 20, 0, 0)
         row.layoutParams = TableRow.LayoutParams(
             TableRow.LayoutParams.MATCH_PARENT,
             TableRow.LayoutParams.WRAP_CONTENT
