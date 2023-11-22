@@ -6,4 +6,6 @@
     </style>
 
     <style name="Theme.Mobdeve_MCO_Fitness" parent="Base.Theme.Mobdeve_MCO_Fitness" />
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar"/>
 </resources>

@@ -23,19 +23,10 @@
             android:name=".UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".StepsCounterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SetGoalActivity"
-            android:exported="false" />
-        <activity
-            android:name=".StatsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".TravelHistoryActivity"
-            android:exported="false" />
-        <activity
             android:name=".DeleteProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LogOutActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

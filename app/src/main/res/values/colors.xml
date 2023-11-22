@@ -5,4 +5,10 @@
     <color name="background_color">#607ed1</color>
     <color name="box_color">#c2b8db</color>
     <color name="accent_color">#e7d5f0</color>
+
+    <color name="darker">#5B0888</color>
+    <color name="dark">#640D94</color>
+    <color name="light">#9D76C1</color>
+    <color name="lighter">#E5CFF7</color>
+
 </resources>

@@ -1,8 +1,7 @@
 package com.mobdeve.see.fitnessapp
 
-import android.content.Context
-import android.content.Intent
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -10,19 +9,25 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.mobdeve.see.fitnessapp.databinding.*
+import com.mikhaellopez.circularprogressbar.CircularProgressBar
+import com.mobdeve.see.fitnessapp.databinding.FragmentStepCounterBinding
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class StepsCounterActivity : AppCompatActivity(), SensorEventListener{
+
+
+class StepCounterFragment : Fragment(), SensorEventListener {
     private lateinit var sensorManager: SensorManager
     private var running: Boolean = false
     private lateinit var tvSteps: TextView
@@ -30,18 +35,35 @@ class StepsCounterActivity : AppCompatActivity(), SensorEventListener{
     private var steps: Int = 0
     private lateinit var userDao: UserDao
     private lateinit var stepLogDao: StepLogDao
+    private lateinit var applicationContext: Context
 
+    private lateinit var progress : CircularProgressBar
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val viewBinding : ActivityStepCounterBinding = ActivityStepCounterBinding.inflate(layoutInflater)
-        setContentView(viewBinding.root)
-        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        tvSteps = findViewById(R.id.tvSteps)
-        fab = findViewById(R.id.btn_fab)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        applicationContext = context
+
+        // Initialize context-dependent objects here
+        val appDatabase = AppDatabase.getDatabase(context)
+        userDao = appDatabase.userDao()
+        stepLogDao = appDatabase.stepLogDao()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val viewBinding: FragmentStepCounterBinding = FragmentStepCounterBinding.inflate(inflater, container, false)
+        return viewBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        tvSteps = view.findViewById(R.id.tvSteps)
+        fab = view.findViewById(R.id.btn_fab)
         tvSteps.text = steps.toString()
+        progress = view.findViewById(R.id.circularProgressBar)
 
-        val appDatabase = AppDatabase.getDatabase(this)
+        val appDatabase = AppDatabase.getDatabase(requireContext())
         userDao = appDatabase.userDao()
         stepLogDao = appDatabase.stepLogDao()
 
@@ -52,7 +74,7 @@ class StepsCounterActivity : AppCompatActivity(), SensorEventListener{
             if (running) {
                 running = false
                 fab.setImageResource(R.drawable.baseline_play_arrow_24)
-                Toast.makeText(this, "Counter Paused", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Counter Paused", Toast.LENGTH_SHORT).show()
             } else {
                 activateSensor()
             }
@@ -71,8 +93,14 @@ class StepsCounterActivity : AppCompatActivity(), SensorEventListener{
         outState.putBoolean("running", running)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState != null) {
+            restoreInstanceState(savedInstanceState)
+        }
+    }
+
+    private fun restoreInstanceState(savedInstanceState: Bundle) {
         steps = savedInstanceState.getInt("steps", 0)
         running = savedInstanceState.getBoolean("running", false)
         tvSteps.text = steps.toString()
@@ -82,11 +110,16 @@ class StepsCounterActivity : AppCompatActivity(), SensorEventListener{
             fab.setImageResource(R.drawable.baseline_play_arrow_24)
         }
     }
+
     override fun onSensorChanged(event: SensorEvent?) {
         Log.d("StepsCounterActivity", "one step taken")
         if(running){
             steps++
             updateDatabase(steps)
+
+            progress.apply {
+                setProgressWithAnimation(steps.toFloat())
+            }
         }
     }
 
@@ -97,15 +130,15 @@ class StepsCounterActivity : AppCompatActivity(), SensorEventListener{
     private fun activateSensor(){
         running = true
         fab.setImageResource(R.drawable.baseline_pause_24)
-        Toast.makeText(this, "Counter Started", Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext, "Counter Started", Toast.LENGTH_SHORT).show()
 
         val PHYSICAL_ACTIVITY = 100
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED) {
             val sensor: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
             if(sensor != null){
                 sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI)
             }else{
-                Toast.makeText(this, "Sensor not found", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Sensor not found", Toast.LENGTH_SHORT).show()
             }
         }else{
             requestPermissions(arrayOf(Manifest.permission.ACTIVITY_RECOGNITION), PHYSICAL_ACTIVITY)
@@ -114,7 +147,7 @@ class StepsCounterActivity : AppCompatActivity(), SensorEventListener{
 
     private fun resetSteps(){
         tvSteps.setOnClickListener{
-            Toast.makeText(this, "Long tap to reset steps", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "Long tap to reset steps", Toast.LENGTH_SHORT).show()
         }
         tvSteps.setOnLongClickListener {
             steps = 0
@@ -123,8 +156,9 @@ class StepsCounterActivity : AppCompatActivity(), SensorEventListener{
         }
     }
 
-    private fun updateDatabase(steps: Int){
-        val userId = intent.getIntExtra("userId", 0)
+    private fun updateDatabase(steps: Int) {
+        // Retrieve userId from fragment arguments
+        val userId = arguments?.getInt("userId", 0) ?: 0
         val date = getTodayDate()
         lifecycleScope.launch {
             val stepLog = stepLogDao.getStepLogForUserAndDate(userId, date)
@@ -135,9 +169,11 @@ class StepsCounterActivity : AppCompatActivity(), SensorEventListener{
             }
         }
     }
-    private fun loadData(){
+
+    private fun loadData() {
         val date = getTodayDate()
-        val userId = intent.getIntExtra("userId", 0)
+        // Retrieve userId from fragment arguments
+        val userId = arguments?.getInt("userId", 0) ?: 0
         lifecycleScope.launch {
             val stepLog = stepLogDao.getStepLogForUserAndDate(userId, date)
             if (stepLog != null) {
@@ -154,30 +190,3 @@ class StepsCounterActivity : AppCompatActivity(), SensorEventListener{
         return dateFormat.format(calendar.time)
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

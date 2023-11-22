@@ -1,16 +1,14 @@
 package com.mobdeve.see.fitnessapp
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.mobdeve.see.fitnessapp.databinding.ActivityUserProfileBinding
+import com.mobdeve.see.fitnessapp.databinding.ActivityDashboardBinding
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
+import androidx.fragment.app.Fragment
 
 class UserProfileActivity : AppCompatActivity() {
     private lateinit var userDao: UserDao
@@ -18,12 +16,12 @@ class UserProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewBinding : ActivityUserProfileBinding = ActivityUserProfileBinding.inflate(layoutInflater)
+        val viewBinding : ActivityDashboardBinding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
         val userFullName = intent.getStringExtra("userFullName") // Get user's full name
         val userId = intent.getIntExtra("userId", 0)
-        viewBinding.textView.text = "Welcome, $userFullName"
+        viewBinding.welcome.text = "Welcome, $userFullName"
 
         val appDatabase = AppDatabase.getDatabase(this)
         userDao = appDatabase.userDao()
@@ -31,6 +29,31 @@ class UserProfileActivity : AppCompatActivity() {
 
         createNewStepLog(userId)
 
+        val stepFragment = StepCounterFragment()
+        val statsFragment = StatsFragment()
+        val userFragment = UserFragment()
+        val historyFragment = HistoryFragment()
+        val bundle = Bundle()
+        bundle.putInt("userId", userId)
+
+        stepFragment.arguments = bundle
+        statsFragment.arguments = bundle
+        userFragment.arguments = bundle
+        historyFragment.arguments = bundle
+
+        setCurrentFragment(stepFragment)
+
+        viewBinding.bottomNavigationView.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.main_menu->setCurrentFragment(stepFragment)
+                R.id.stats->setCurrentFragment(statsFragment)
+                R.id.user->setCurrentFragment(userFragment)
+                R.id.history->setCurrentFragment(historyFragment)
+            }
+            true
+        }
+
+        /*
         viewBinding.btnStepCounter.setOnClickListener {
             val intent = Intent(applicationContext, StepsCounterActivity::class.java)
             intent.putExtra("userId", userId)
@@ -59,6 +82,7 @@ class UserProfileActivity : AppCompatActivity() {
         viewBinding.btnLogout.setOnClickListener {
             finish()
         }
+         */
     }
 
     private fun createNewStepLog(userId: Int) {
@@ -79,4 +103,10 @@ class UserProfileActivity : AppCompatActivity() {
         val calendar = Calendar.getInstance()
         return dateFormat.format(calendar.time)
     }
+
+    private fun setCurrentFragment(fragment: Fragment) =
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.flFragment,fragment)
+            commit()
+        }
 }
