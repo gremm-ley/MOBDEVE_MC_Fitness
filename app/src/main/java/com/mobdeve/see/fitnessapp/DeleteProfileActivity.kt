@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.mobdeve.see.fitnessapp.databinding.*
+import com.mobdeve.see.fitnessapp.databinding.ActivityDeleteProfileBinding
 import kotlinx.coroutines.launch
 
 class DeleteProfileActivity : AppCompatActivity() {

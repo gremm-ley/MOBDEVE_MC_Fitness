@@ -53,6 +53,6 @@
             android:text="No"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_delete_yes" />
+            app:layout_constraintTop_toBottomOf="@id/btn_logout_yes" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
