@@ -26,9 +26,10 @@ class LogOutActivity : AppCompatActivity() {
         val userId = intent.getIntExtra("userId", 0)
 
         viewBinding.btnLogoutYes.setOnClickListener (View.OnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(applicationContext, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
-            finish() // Finish the LogoutActivity
+            finish()
         })
 
         viewBinding.btnLogoutNo.setOnClickListener (View.OnClickListener {
