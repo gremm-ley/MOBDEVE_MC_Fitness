@@ -105,7 +105,7 @@ class StepCounterFragment : Fragment(), SensorEventListener {
                 progress.progressMax = stepLog.goal.toFloat()
             }
         }
-        
+
         progress.progress = steps.toFloat()
 
 
