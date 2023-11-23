@@ -36,6 +36,7 @@ class StepCounterFragment : Fragment(), SensorEventListener {
     private lateinit var userDao: UserDao
     private lateinit var stepLogDao: StepLogDao
     private lateinit var applicationContext: Context
+    private lateinit var steplog : StepLog
 
     private lateinit var progress : CircularProgressBar
 
@@ -63,6 +64,14 @@ class StepCounterFragment : Fragment(), SensorEventListener {
         tvSteps.text = steps.toString()
         progress = view.findViewById(R.id.circularProgressBar)
 
+        lifecycleScope.launch {
+            val userId = arguments?.getInt("userId", 0) ?: 0
+            val stepLogs = stepLogDao.getStepLogsForUser(userId)
+        }
+
+
+
+
         val appDatabase = AppDatabase.getDatabase(requireContext())
         userDao = appDatabase.userDao()
         stepLogDao = appDatabase.stepLogDao()
@@ -85,6 +94,27 @@ class StepCounterFragment : Fragment(), SensorEventListener {
         super.onResume()
         if(running)
             activateSensor()
+
+        // For the progress bar
+        val currentDate = getCurrentDate()
+        lifecycleScope.launch {
+            val userId = arguments?.getInt("userId", 0) ?: 0
+            val stepLog = stepLogDao.getStepLogForUserAndDate(userId, currentDate)
+
+            if (stepLog != null) {
+                progress.progressMax = stepLog.goal.toFloat()
+            }
+        }
+        
+        progress.progress = steps.toFloat()
+
+
+    }
+
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val calendar = Calendar.getInstance()
+        return dateFormat.format(calendar.time)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

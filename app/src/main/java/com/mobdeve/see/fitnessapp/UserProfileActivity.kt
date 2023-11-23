@@ -36,6 +36,7 @@ class UserProfileActivity : AppCompatActivity() {
         val bundle = Bundle()
         bundle.putInt("userId", userId)
 
+
         stepFragment.arguments = bundle
         statsFragment.arguments = bundle
         userFragment.arguments = bundle
